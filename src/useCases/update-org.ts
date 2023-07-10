@@ -18,9 +18,9 @@ export class UpdateOrgUseCase {
   constructor(private orgRepository: IOrgRepository) {}
 
   async execute({ org_id, data }: IUpdateOrg): Promise<IUpdateOrgUseCase> {
-    const orgFindById = await this.orgRepository.findById(org_id)
+    const orgFindedById = await this.orgRepository.findById(org_id)
 
-    if (!orgFindById) {
+    if (!orgFindedById) {
       throw new ResourceNotFoundError()
     }
 

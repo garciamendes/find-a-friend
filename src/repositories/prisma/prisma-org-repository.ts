@@ -38,4 +38,12 @@ export class PrismaOrgRepository implements IOrgRepository {
 
     return org
   }
+
+  async delete(org_id: string) {
+    await prisma.org.delete({
+      where: { id: org_id },
+    })
+
+    return 'Org deleted successfully'
+  }
 }

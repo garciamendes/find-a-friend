@@ -10,7 +10,7 @@ import { UpdateOrgUseCase } from './update-org'
 let orgRepository: InMemoryOrgRepository
 let sut: UpdateOrgUseCase
 
-describe('Create Use Case', () => {
+describe('Update Use Case', () => {
   beforeEach(async () => {
     orgRepository = new InMemoryOrgRepository()
     sut = new UpdateOrgUseCase(orgRepository)

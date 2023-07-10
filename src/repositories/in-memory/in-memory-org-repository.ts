@@ -94,4 +94,11 @@ export class InMemoryOrgRepository implements IOrgRepository {
 
     return org
   }
+
+  async delete(org_id: string) {
+    const orgIndex = this.items.findIndex((org) => org.id === org_id)
+    delete this.items[orgIndex]
+
+    return 'Org deleted successfully'
+  }
 }
