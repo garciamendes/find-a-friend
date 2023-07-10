@@ -50,8 +50,45 @@ export class InMemoryOrgRepository implements IOrgRepository {
     return org
   }
 
+  async update(org_id: string, data: Prisma.OrgUpdateInput) {
+    const orgIndex = this.items.findIndex((org) => org.id === org_id)
+
+    if (orgIndex === -1) return null
+    let org = this.items[orgIndex] as any
+
+    const updatedOrg = {
+      name: data.name || org.name,
+      name_org: data.name_org || org.name_org,
+      cep: data.cep || org.cep,
+      street_number: data.street_number || org.street_number,
+      neighborhood: data.neighborhood || org.neighborhood,
+      city: data.city || org.city,
+      state: data.state || org.state,
+      address: data.address || org.address,
+      whatsapp: data.whatsapp || org.whatsapp,
+      role: data.role || org.role,
+
+      // not update
+      id: org.id,
+      email: org.email,
+      password_hash: org.password_hash,
+      created: org.created,
+    }
+
+    org = updatedOrg
+    return org
+  }
+
   async findByEmail(email: string) {
     const org = this.items.find((org) => org.email === email)
+
+    if (!org) return null
+
+    return org
+  }
+
+  async findById(org_id: string) {
+    const org = this.items.find((org) => org.id === org_id)
 
     if (!org) return null
 

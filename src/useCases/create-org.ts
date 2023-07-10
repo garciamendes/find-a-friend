@@ -1,10 +1,10 @@
 // Third party
 import { Org } from '@prisma/client'
+import { hash } from 'bcryptjs'
 
 // Project
 import { IOrgRepository } from '../repositories/org-repository'
 import { OrgAlreadyExistsError } from './errors/org-already-exists-error'
-import { hash } from 'bcryptjs'
 
 interface ICreateOrg {
   email: string

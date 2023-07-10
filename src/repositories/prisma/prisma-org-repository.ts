@@ -13,4 +13,29 @@ export class PrismaOrgRepository implements IOrgRepository {
 
     return org
   }
+
+  async findByEmail(email: string) {
+    const org = await prisma.org.findUnique({
+      where: { email },
+    })
+
+    return org
+  }
+
+  async findById(org_id: string) {
+    const org = await prisma.org.findUnique({
+      where: { id: org_id },
+    })
+
+    return org
+  }
+
+  async update(org_id: string, data: Prisma.OrgUpdateInput) {
+    const org = await prisma.org.update({
+      where: { id: org_id },
+      data,
+    })
+
+    return org
+  }
 }
