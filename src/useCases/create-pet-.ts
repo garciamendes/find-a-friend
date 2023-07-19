@@ -11,6 +11,8 @@ import {
 
 // Project
 import { IPetRepository } from '../repositories/pet-repository'
+import { IOrgRepository } from '../repositories/org-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface ICreatePet {
   id?: string
@@ -33,9 +35,15 @@ interface ICreatePetUseCase {
 }
 
 export class CreatePetUseCase {
-  constructor(private petRepository: IPetRepository) {}
+  constructor(
+    private petRepository: IPetRepository,
+    private orgRepository: IOrgRepository,
+  ) {}
 
   async execute(data: ICreatePet): Promise<ICreatePetUseCase> {
+    const orgExist = await this.orgRepository.findById(data.org_id)
+    if (!orgExist) throw new ResourceNotFoundError()
+
     const pet = await this.petRepository.create({
       name: data.name,
       description: data.description,
@@ -47,7 +55,7 @@ export class CreatePetUseCase {
       images_urls: data.images_urls,
       requirementsAdoption: data.requirementsAdoption,
       org_id: data.org_id,
-      city: data.city,
+      city: orgExist.city,
       status: data.status,
       created: new Date(),
       modified: new Date(),

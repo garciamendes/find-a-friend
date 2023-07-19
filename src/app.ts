@@ -6,6 +6,7 @@ import fastifyCookie from '@fastify/cookie'
 
 // Local
 import { env } from './env'
+import { accountRoutes } from './http/controllers/account/routes'
 
 export const app = fastify()
 
@@ -20,6 +21,9 @@ app.register(fastifyJwt, {
   },
 })
 app.register(fastifyCookie)
+
+// routes
+app.register(accountRoutes, { prefix: 'api/account' })
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

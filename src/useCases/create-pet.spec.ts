@@ -11,16 +11,17 @@ import { CreateOrgUseCase } from './create-org'
 import { InMemoryAccountRepository } from '../repositories/in-memory/in-memory-account-repository'
 
 let petRepository: InMemoryPetsRepository
+let orgRepository: InMemoryOrgRepository
 let sut: CreatePetUseCase
 
 describe('Create Use Case', () => {
   beforeEach(async () => {
     petRepository = new InMemoryPetsRepository()
-    sut = new CreatePetUseCase(petRepository)
+    orgRepository = new InMemoryOrgRepository()
+    sut = new CreatePetUseCase(petRepository, orgRepository)
   })
 
   it('Validando se é possível a criação de um novo pet', async () => {
-    const orgRepository = new InMemoryOrgRepository()
     const accountRepository = new InMemoryAccountRepository()
     const createOrg = new CreateOrgUseCase(orgRepository, accountRepository)
 
@@ -56,7 +57,6 @@ describe('Create Use Case', () => {
       ],
       requirementsAdoption: ['Sem antecedente criminais'],
       org_id: org.id,
-      city: org.city,
     })
 
     expect(pet.id).toEqual(expect.any(String))

@@ -30,7 +30,7 @@ describe('Find by ID Use Case', () => {
       password_hash: 'dev123',
     })
 
-    const createPet = new CreatePetUseCase(petRepository)
+    const createPet = new CreatePetUseCase(petRepository, orgRepository)
 
     const { org: org_1 } = await createOrg.execute({
       name: 'Matheus',
@@ -59,7 +59,6 @@ describe('Find by ID Use Case', () => {
       ],
       requirementsAdoption: ['Sem antecedente criminais'],
       org_id: org_1.id,
-      city: org_1.city,
     })
 
     await createPet.execute({
