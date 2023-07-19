@@ -8,31 +8,38 @@ import { InMemoryOrgRepository } from '../repositories/in-memory/in-memory-org-r
 // Local
 import { CreatePetUseCase } from './create-pet-'
 import { CreateOrgUseCase } from './create-org'
+import { InMemoryAccountRepository } from '../repositories/in-memory/in-memory-account-repository'
 
-let orgRepository: InMemoryPetsRepository
+let petRepository: InMemoryPetsRepository
 let sut: CreatePetUseCase
 
 describe('Create Use Case', () => {
   beforeEach(async () => {
-    orgRepository = new InMemoryPetsRepository()
-    sut = new CreatePetUseCase(orgRepository)
+    petRepository = new InMemoryPetsRepository()
+    sut = new CreatePetUseCase(petRepository)
   })
 
   it('Validando se é possível a criação de um novo pet', async () => {
     const orgRepository = new InMemoryOrgRepository()
-    const createOrg = new CreateOrgUseCase(orgRepository)
+    const accountRepository = new InMemoryAccountRepository()
+    const createOrg = new CreateOrgUseCase(orgRepository, accountRepository)
+
+    const account = await accountRepository.create({
+      email: 'garcia@gmail.com',
+      password_hash: 'dev123',
+    })
+
     const { org } = await createOrg.execute({
       name: 'Matheus',
       name_org: 'Get_friendly_org',
       street_number: 231,
       whatsapp: '85988993322',
-      email: 'g@gmail.com',
-      password_hash: 'dev123',
       address: 'Rua Ipa',
       cep: '60123-123',
       city: 'Fortaleza',
       neighborhood: 'Praia do passado',
       state: 'CE',
+      account_id: account.id,
     })
 
     const { pet } = await sut.execute({

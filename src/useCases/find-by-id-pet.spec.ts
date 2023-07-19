@@ -9,6 +9,7 @@ import { CreatePetUseCase } from './create-pet-'
 import { InMemoryOrgRepository } from '../repositories/in-memory/in-memory-org-repository'
 import { CreateOrgUseCase } from './create-org'
 import { FindByIdPet } from './find-by-id-pet'
+import { InMemoryAccountRepository } from '../repositories/in-memory/in-memory-account-repository'
 
 let petRepository: InMemoryPetsRepository
 let sut: FindByIdPet
@@ -21,7 +22,13 @@ describe('Find by ID Use Case', () => {
 
   it('Validando se é possível buscar o detalhe do pet', async () => {
     const orgRepository = new InMemoryOrgRepository()
-    const createOrg = new CreateOrgUseCase(orgRepository)
+    const accountRepository = new InMemoryAccountRepository()
+    const createOrg = new CreateOrgUseCase(orgRepository, accountRepository)
+
+    const account = await accountRepository.create({
+      email: 'garcia@gmail.com',
+      password_hash: 'dev123',
+    })
 
     const createPet = new CreatePetUseCase(petRepository)
 
@@ -30,13 +37,12 @@ describe('Find by ID Use Case', () => {
       name_org: 'Get_friendly_org',
       street_number: 231,
       whatsapp: '85988993322',
-      email: 'ga@gmail.com',
-      password_hash: 'dev123',
       address: 'Rua Ipa',
       cep: '60123-123',
       city: 'Fortaleza',
       neighborhood: 'Praia do passado',
       state: 'CE',
+      account_id: account.id,
     })
 
     const { pet: pet_01 } = await createPet.execute({
@@ -55,6 +61,7 @@ describe('Find by ID Use Case', () => {
       org_id: org_1.id,
       city: org_1.city,
     })
+
     await createPet.execute({
       name: `dog_02`,
       description: 'Get_friendly_org',

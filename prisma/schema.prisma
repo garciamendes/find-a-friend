@@ -17,8 +17,6 @@ enum Role {
 
 model Org {
   id            String   @id @default(uuid())
-  email         String   @unique
-  password_hash String
   name          String
   name_org      String
   cep           String
@@ -30,9 +28,18 @@ model Org {
   whatsapp      String
   role          Role     @default(USER)
   created       DateTime @default(now())
-  pet           Pet[]
+  account       Account  @relation(fields: [account_id], references: [id])
+  account_id    String   @unique
+  Pet           Pet[]
 
   @@map("orgs")
+}
+
+model Account {
+  id            String @id @default(uuid())
+  email         String @unique
+  password_hash String
+  org           Org?
 }
 
 enum Age {
@@ -78,11 +85,11 @@ model Pet {
   id                   String            @id @default(uuid())
   name                 String
   description          String
-  age                  Age               @default(NULL)
-  type                 TypePet           @default(NULL)
-  levelEnergy          LevelEnergy       @default(NULL)
-  levelIndependence    LevelIndependence @default(NULL)
-  environment          Environment       @default(NULL)
+  age                  Age
+  type                 TypePet
+  levelEnergy          LevelEnergy
+  levelIndependence    LevelIndependence
+  environment          Environment
   images_urls          String[]
   requirementsAdoption String[]
   org                  Org               @relation(fields: [org_id], references: [id])

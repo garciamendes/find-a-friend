@@ -6,6 +6,7 @@ import { InMemoryOrgRepository } from '../repositories/in-memory/in-memory-org-r
 
 // Local
 import { UpdateOrgUseCase } from './update-org'
+import { InMemoryAccountRepository } from '../repositories/in-memory/in-memory-account-repository'
 
 let orgRepository: InMemoryOrgRepository
 let sut: UpdateOrgUseCase
@@ -17,18 +18,23 @@ describe('Update Use Case', () => {
   })
 
   it('Validando se é possível fazer a atualização da org', async () => {
+    const accountRepository = new InMemoryAccountRepository()
+    const account = await accountRepository.create({
+      email: 'garcia@gmail.com',
+      password_hash: 'dev123',
+    })
+
     const org_before_update = await orgRepository.create({
       name: 'Matheus',
       name_org: 'Get_friendly_org',
       street_number: 231,
       whatsapp: '85988993322',
-      email: 'g@gmail.com',
-      password_hash: 'dev123',
       address: 'Rua Ipa',
       cep: '60123-123',
       city: 'Fortaleza',
       neighborhood: 'Praia do passado',
       state: 'CE',
+      account_id: account.id,
     })
 
     const data = {
@@ -48,8 +54,7 @@ describe('Update Use Case', () => {
 
       // Não teste
       id: org_before_update.id,
-      email: org_before_update.email,
-      password_hash: org_before_update.password_hash,
+      account_id: org_before_update.account_id,
       address: org_before_update.address,
       cep: org_before_update.cep,
       city: org_before_update.city,

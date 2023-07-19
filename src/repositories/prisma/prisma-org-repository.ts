@@ -6,18 +6,11 @@ import { prisma } from '../../lib/prisma'
 import { IOrgRepository } from '../org-repository'
 
 export class PrismaOrgRepository implements IOrgRepository {
-  async create(data: Prisma.OrgCreateInput) {
+  async create(data: Prisma.OrgUncheckedCreateInput) {
     const org = await prisma.org.create({
       data,
     })
 
-    return org
-  }
-
-  async findByEmail(email: string) {
-    const org = await prisma.org.findUnique({
-      where: { email },
-    })
     return org
   }
 
@@ -29,7 +22,15 @@ export class PrismaOrgRepository implements IOrgRepository {
     return org
   }
 
-  async update(org_id: string, data: Prisma.OrgUpdateInput) {
+  async findByAccountId(account_id: string) {
+    const org = await prisma.org.findUnique({
+      where: { account_id },
+    })
+
+    return org
+  }
+
+  async update(org_id: string, data: Prisma.OrgUncheckedUpdateInput) {
     const org = await prisma.org.update({
       where: { id: org_id },
       data,

@@ -26,13 +26,12 @@ export class InMemoryOrgRepository implements IOrgRepository {
       whatsapp: string
       role?: Role
       created?: Date | string}
+      account_id: string
    */
 
-  async create(data: Prisma.OrgCreateInput) {
+  async create(data: Prisma.OrgUncheckedCreateInput) {
     const org = {
       id: randomUUID(),
-      email: data.email,
-      password_hash: data.password_hash,
       name: data.name,
       name_org: data.name_org,
       cep: data.cep,
@@ -44,13 +43,14 @@ export class InMemoryOrgRepository implements IOrgRepository {
       whatsapp: data.whatsapp,
       role: data.role || 'USER',
       created: new Date(),
+      account_id: data.account_id,
     }
 
     this.items.push(org)
     return org
   }
 
-  async update(org_id: string, data: Prisma.OrgUpdateInput) {
+  async update(org_id: string, data: Prisma.OrgUncheckedUpdateInput) {
     const orgIndex = this.items.findIndex((org) => org.id === org_id)
 
     if (orgIndex === -1) return null
@@ -70,8 +70,7 @@ export class InMemoryOrgRepository implements IOrgRepository {
 
       // not update
       id: org.id,
-      email: org.email,
-      password_hash: org.password_hash,
+      account_id: org.account_id,
       created: org.created,
     }
 
@@ -79,16 +78,16 @@ export class InMemoryOrgRepository implements IOrgRepository {
     return org
   }
 
-  async findByEmail(email: string) {
-    const org = this.items.find((org) => org.email === email)
+  async findById(org_id: string) {
+    const org = this.items.find((org) => org.id === org_id)
 
     if (!org) return null
 
     return org
   }
 
-  async findById(org_id: string) {
-    const org = this.items.find((org) => org.id === org_id)
+  async findByAccountId(account_id: string) {
+    const org = this.items.find((org) => org.account_id === account_id)
 
     if (!org) return null
 

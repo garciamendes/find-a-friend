@@ -7,7 +7,7 @@ import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface IUpdateOrg {
   org_id: string
-  data: Prisma.OrgUpdateInput
+  data: Prisma.OrgUncheckedUpdateInput
 }
 
 interface IUpdateOrgUseCase {
@@ -24,9 +24,8 @@ export class UpdateOrgUseCase {
       throw new ResourceNotFoundError()
     }
 
-    if (data.id || data.email || data.password_hash || data.created) {
-      delete data.email
-      delete data.password_hash
+    if (data.id || data.account_id || data.created) {
+      delete data.account_id
       delete data.id
       delete data.created
     }

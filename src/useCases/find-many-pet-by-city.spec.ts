@@ -9,6 +9,7 @@ import { FindManyPetByCity } from './find-many-pet-by-city'
 import { CreatePetUseCase } from './create-pet-'
 import { InMemoryOrgRepository } from '../repositories/in-memory/in-memory-org-repository'
 import { CreateOrgUseCase } from './create-org'
+import { InMemoryAccountRepository } from '../repositories/in-memory/in-memory-account-repository'
 
 let petRepository: InMemoryPetsRepository
 let sut: FindManyPetByCity
@@ -21,7 +22,17 @@ describe('Find by city Use Case', () => {
 
   it('Validando se é possível filtrar pets por cidade', async () => {
     const orgRepository = new InMemoryOrgRepository()
-    const createOrg = new CreateOrgUseCase(orgRepository)
+    const accountRepository = new InMemoryAccountRepository()
+    const createOrg = new CreateOrgUseCase(orgRepository, accountRepository)
+
+    const account = await accountRepository.create({
+      email: 'garcia@gmail.com',
+      password_hash: 'dev123',
+    })
+    const account_02 = await accountRepository.create({
+      email: 'garcia@gmail.com',
+      password_hash: 'dev123',
+    })
 
     const createPet = new CreatePetUseCase(petRepository)
 
@@ -30,26 +41,24 @@ describe('Find by city Use Case', () => {
       name_org: 'Get_friendly_org',
       street_number: 231,
       whatsapp: '85988993322',
-      email: 'ga@gmail.com',
-      password_hash: 'dev123',
       address: 'Rua Ipa',
       cep: '60123-123',
       city: 'Fortaleza',
       neighborhood: 'Praia do passado',
       state: 'CE',
+      account_id: account.id,
     })
     const { org: org_2 } = await createOrg.execute({
       name: 'Matheus',
       name_org: 'Get_friendly_org_SP',
       street_number: 231,
       whatsapp: '85988993322',
-      email: 'g@gmail.com',
-      password_hash: 'dev123',
       address: 'Rua Ipa',
       cep: '60123-123',
       city: 'São Paulo',
       neighborhood: 'Praia do passado',
       state: 'CE',
+      account_id: account_02.id,
     })
 
     await createPet.execute({
