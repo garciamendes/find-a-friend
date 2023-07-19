@@ -30,6 +30,67 @@ model Org {
   whatsapp      String
   role          Role     @default(USER)
   created       DateTime @default(now())
+  pet           Pet[]
 
   @@map("orgs")
+}
+
+enum Age {
+  NULL
+  CUB
+  ADULT
+}
+
+enum TypePet {
+  NULL
+  LITTLE
+  MENDIUM
+  BIG
+}
+
+enum LevelEnergy {
+  NULL
+  LITTLE
+  MENDIUM
+  BIG
+}
+
+enum LevelIndependence {
+  NULL
+  LITTLE
+  MENDIUM
+  BIG
+}
+
+enum Environment {
+  NULL
+  OPENED
+  WIDE_OPENED
+}
+
+enum Status {
+  IN_PROCESS_ADOPTION
+  FREE
+  ADOPTED
+}
+
+model Pet {
+  id                   String            @id @default(uuid())
+  name                 String
+  description          String
+  age                  Age               @default(NULL)
+  type                 TypePet           @default(NULL)
+  levelEnergy          LevelEnergy       @default(NULL)
+  levelIndependence    LevelIndependence @default(NULL)
+  environment          Environment       @default(NULL)
+  images_urls          String[]
+  requirementsAdoption String[]
+  org                  Org               @relation(fields: [org_id], references: [id])
+  org_id               String
+  status               Status            @default(FREE)
+  city                 String?
+  created              DateTime          @default(now())
+  modified             DateTime          @default(now())
+
+  @@map("pets")
 }

@@ -18,7 +18,6 @@ export class PrismaOrgRepository implements IOrgRepository {
     const org = await prisma.org.findUnique({
       where: { email },
     })
-
     return org
   }
 
