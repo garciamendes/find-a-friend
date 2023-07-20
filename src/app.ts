@@ -3,10 +3,13 @@ import fastify from 'fastify'
 import { ZodError } from 'zod'
 import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
+import fastifyMulter from 'fastify-multer'
 
 // Local
 import { env } from './env'
 import { accountRoutes } from './http/controllers/account/routes'
+import { orgRoutes } from './http/controllers/org/routes'
+import { petRoutes } from './http/controllers/pet/routes'
 
 export const app = fastify()
 
@@ -17,13 +20,16 @@ app.register(fastifyJwt, {
     signed: false,
   },
   sign: {
-    expiresIn: '10m',
+    expiresIn: '1d',
   },
 })
 app.register(fastifyCookie)
+app.register(fastifyMulter.contentParser)
 
 // routes
 app.register(accountRoutes, { prefix: 'api/account' })
+app.register(orgRoutes, { prefix: 'api/org' })
+app.register(petRoutes, { prefix: 'api/pet' })
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
